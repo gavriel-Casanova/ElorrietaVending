@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PanelLogin extends JPanel{
 	public PanelLogin() {
@@ -31,6 +33,10 @@ public class PanelLogin extends JPanel{
 		textContraseña.setColumns(10);
 		
 		JButton btnIngreso = new JButton("Click");
+		btnIngreso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnIngreso.setBounds(164, 348, 84, 20);
 		add(btnIngreso);
 	}
