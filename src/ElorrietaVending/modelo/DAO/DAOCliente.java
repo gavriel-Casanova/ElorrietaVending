@@ -36,7 +36,7 @@ public class DAOCliente implements DaoInterfaces <Cliente> {
 	public Cliente getByLogin(String uss, String pass) {
 		Cliente ret = null;
 
-		String sql = "select * from clientes c join credenciales x on c.idCredencia = x.id where usuaio = '"+uss+"' and contraseña = '"+pass+"'";
+		String sql = "select * from clientes c join credenciales x on c.idCredencia = x.id where usuario = '"+uss+"' and contraseña = '"+pass+"'";
 
 		Connection connection = null;
 		Statement statement = null;
@@ -59,8 +59,8 @@ public class DAOCliente implements DaoInterfaces <Cliente> {
 				String nombre = resultSet.getString("nombre");
 				String apellido = resultSet.getString("apellido");
 				int telefono = resultSet.getInt("telefono");
-				String correo = resultSet.getString("correo");
-				int idCredencial = resultSet.getInt("idCredencial");
+				String correo = resultSet.getString("email");
+				int idCredencial = resultSet.getInt("idCredencia");
 				String usuario = resultSet.getString("usuario");
 				String contraseña = resultSet.getString("contraseña");
 				
