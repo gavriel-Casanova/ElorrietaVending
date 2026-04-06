@@ -40,4 +40,8 @@ public class Credencial {
 		this.usuario = usuario;
 		this.contraseña = contraseña;
 	}
+
+	public Credencial() {
+		// TODO Auto-generated constructor stub
+	}
 }
