@@ -36,7 +36,7 @@ public class DAOAdministrador implements DaoInterfaces <Administrador> {
 	public Administrador getByLogin(String uss, String pass) {
 		Administrador ret = null;
 
-		String sql = "select * from administrador a join credenciales x on a.idCredencia = x.id where usuaio = '"+uss+"' and contraseña = '"+pass+"'";
+		String sql = "select * from administrador a join credenciales x on a.idCredencial = x.id where usuario = '"+uss+"' and contraseña = '"+pass+"'";
 
 		Connection connection = null;
 		Statement statement = null;
@@ -59,7 +59,7 @@ public class DAOAdministrador implements DaoInterfaces <Administrador> {
 				String nombre = resultSet.getString("nombre");
 				String apellido = resultSet.getString("apellido");
 				int telefono = resultSet.getInt("telefono");
-				String correo = resultSet.getString("correo");
+				String correo = resultSet.getString("email");
 				int idCredencial = resultSet.getInt("idCredencial");
 				String usuario = resultSet.getString("usuario");
 				String contraseña = resultSet.getString("contraseña");
