@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Producto {
 	private String Nombre = null;
-	private int precio = 0;
+	private double precio = 0;
 	private String tipo = null;
 	private int id= 0;
 	public String getNombre() {
@@ -13,10 +13,10 @@ public class Producto {
 	public void setNombre(String nombre) {
 		Nombre = nombre;
 	}
-	public int getPrecio() {
+	public double getPrecio() {
 		return precio;
 	}
-	public void setPrecio(int precio) {
+	public void setPrecio(double precio) {
 		this.precio = precio;
 	}
 	public String getTipo() {
