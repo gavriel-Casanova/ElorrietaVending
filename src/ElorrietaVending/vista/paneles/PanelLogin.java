@@ -12,13 +12,15 @@ import java.awt.event.ActionEvent;
 
 import ElorrietaVending.controlador.Controlador;
 import ElorrietaVending.modelo.entidades.Persona;
+import ElorrietaVending.modelo.entidades.Personas.Administrador;
+import ElorrietaVending.vista.ventanas.VentanaPrincipal;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class PanelLogin extends JPanel {
-	public PanelLogin() {
+	public PanelLogin(VentanaPrincipal ventana ) {
 		setSize(598, 798);
 		setLayout(null);
 
@@ -55,11 +57,14 @@ public class PanelLogin extends JPanel {
 				String usuario = textUsuario.getText();
 				String contraseña = textContraseña.getText();
 				Persona persona = controlador.validarLogin(usuario, contraseña);
-				
-				if(persona == null) {
-					JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+
+				if (persona == null) {
+					JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrecta", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}else if(persona instanceof Administrador ) {
+					ventana.cambiarPanel(1);
 				}
-				
+
 				System.out.println(persona);
 			}
 		});
