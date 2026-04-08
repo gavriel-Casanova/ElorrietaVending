@@ -17,7 +17,7 @@ public class VentanaPrincipal extends JFrame {
 		PanelLogin panelLogin = new PanelLogin(this);
 		add(panelLogin);
 		paneles.add(panelLogin);
-		PanelAdministrador panelAdministrador = new PanelAdministrador();
+		PanelAdministrador panelAdministrador = new PanelAdministrador(this);
 		paneles.add(panelAdministrador);
 	}
 
