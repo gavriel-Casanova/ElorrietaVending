@@ -14,6 +14,7 @@ public class VentanaPrincipal extends JFrame {
 	public VentanaPrincipal() {
 		setResizable(false);
 		setSize(600, 800);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		PanelLogin panelLogin = new PanelLogin(this);
 		add(panelLogin);
 		paneles.add(panelLogin);

@@ -196,7 +196,7 @@ public class DAOProductos implements DaoInterfaces<Producto> {
 
 	}
 
-	public void UpdateProyecto(Producto log) {
+	public void Update(Producto log) {
 
 		Connection connection = null;
 
