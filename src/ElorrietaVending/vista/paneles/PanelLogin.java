@@ -5,6 +5,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+
 import ElorrietaVending.controlador.Controlador;
 import ElorrietaVending.modelo.entidades.Persona;
 import ElorrietaVending.modelo.entidades.Personas.Administrador;
@@ -40,6 +45,10 @@ public class PanelLogin extends JPanel {
 		textContraseña.setColumns(10);
 
 		JButton btnIngreso = new JButton("Click");
+		btnIngreso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnIngreso.setBounds(164, 348, 84, 20);
 		btnIngreso.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
