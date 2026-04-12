@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class PanelAdministrador extends JPanel {
 
@@ -23,16 +24,21 @@ public class PanelAdministrador extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField textFieldCbxNombre;
-	private JTextField textField_1CbxPrecio;
+	private JTextField txtNombre;
+	private JTextField txtPrecio;
 	private DAOProductos daoProductos = new DAOProductos();
-	private JComboBox<String> comboBoxCbxTipo = null;
-	JComboBox<String> comboBoxCbxBebidas = null;
-	JComboBox<String> comboBox_1CbxBolleria = null;
-	JComboBox<String> comboBox_2CbxFrituras = null;
-	JComboBox<String> comboBox_3CbxDulces = null;
+	private JComboBox<String> cbxTipo = null;
+	JComboBox<String> cbxBebidas = null;
+	JComboBox<String> cbxBolleria = null;
+	JComboBox<String> cbxFrituras = null;
+	JComboBox<String> cbxDulces = null;
 	private Producto productoSeleccionado = null;
-
+	private boolean nuevoProducto = false;
+	private ArrayList<Producto> bebidas = null;
+	private ArrayList<Producto> bolleria = null;
+	private ArrayList<Producto> frituras = null;
+	private ArrayList<Producto> dulces = null;
+	
 	public PanelAdministrador(VentanaPrincipal ventana) {
 		setBackground(Color.PINK);
 		setSize(598, 798);
@@ -47,44 +53,45 @@ public class PanelAdministrador extends JPanel {
 		btnAtras.setBounds(29, 59, 89, 23);
 		add(btnAtras);
 
-		ArrayList<Producto> bebidas = daoProductos.getByTipo("bebidas");
-		comboBoxCbxBebidas = new JComboBox();
-		comboBoxCbxBebidas.addActionListener(new ActionListener() {
+		bebidas = daoProductos.getByTipo("bebidas");
+		cbxBebidas = new JComboBox();
+		cbxBebidas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(comboBoxCbxBebidas.getSelectedItem() == null) {
+				if(cbxBebidas.getSelectedItem() == null) {
 					return;
 				}
-				
+				bebidas = daoProductos.getByTipo("bebidas");
 				for (int i = 0; i < bebidas.size(); i++) {
-					if (comboBoxCbxBebidas.getSelectedItem().toString().equalsIgnoreCase(bebidas.get(i).getNombre())) {
+					if (cbxBebidas.getSelectedItem().toString().equalsIgnoreCase(bebidas.get(i).getNombre())) {
 						mostrarProductos(bebidas.get(i), 0);
 						productoSeleccionado = bebidas.get(i);
 					}
 				}
 			}
 		});
-		comboBoxCbxBebidas.addItem("");
+		cbxBebidas.addItem("");
 		for (int i = 0; i < bebidas.size(); i++) {
-			comboBoxCbxBebidas.addItem(bebidas.get(i).getNombre());
+			cbxBebidas.addItem(bebidas.get(i).getNombre());
 		}
-		comboBoxCbxBebidas.setToolTipText("");
-		comboBoxCbxBebidas.setBounds(30, 186, 134, 23);
-		add(comboBoxCbxBebidas);
+		cbxBebidas.setToolTipText("");
+		cbxBebidas.setBounds(30, 186, 134, 23);
+		add(cbxBebidas);
 
-		ArrayList<Producto> bolleria = daoProductos.getByTipo("bolleria");
-		comboBox_1CbxBolleria = new JComboBox();
-		comboBox_1CbxBolleria.addItem("");
+		bolleria = daoProductos.getByTipo("bolleria");
+		cbxBolleria = new JComboBox();
+		cbxBolleria.addItem("");
 		for (int i = 0; i < bolleria.size(); i++) {
-			comboBox_1CbxBolleria.addItem(bolleria.get(i).getNombre());
+			cbxBolleria.addItem(bolleria.get(i).getNombre());
 		}
-		comboBox_1CbxBolleria.addActionListener(new ActionListener() {
+		cbxBolleria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(comboBox_1CbxBolleria.getSelectedItem() == null) {
+				bolleria = daoProductos.getByTipo("bolleria");
+				if(cbxBolleria.getSelectedItem() == null) {
 					return;
 				}
 				
 				for (int i = 0; i < bolleria.size(); i++) {
-					if (comboBox_1CbxBolleria.getSelectedItem().toString()
+					if (cbxBolleria.getSelectedItem().toString()
 							.equalsIgnoreCase(bolleria.get(i).getNombre())) {
 						mostrarProductos(bolleria.get(i), 1);
 						productoSeleccionado = bolleria.get(i);
@@ -93,23 +100,24 @@ public class PanelAdministrador extends JPanel {
 			}
 		});
 
-		comboBox_1CbxBolleria.setBounds(30, 277, 134, 23);
-		add(comboBox_1CbxBolleria);
+		cbxBolleria.setBounds(30, 277, 134, 23);
+		add(cbxBolleria);
 
-		ArrayList<Producto> frituras = daoProductos.getByTipo("frituras");
-		comboBox_2CbxFrituras = new JComboBox();
-		comboBox_2CbxFrituras.addItem("");
+		frituras = daoProductos.getByTipo("frituras");
+		cbxFrituras = new JComboBox();
+		cbxFrituras.addItem("");
 		for (int i = 0; i < frituras.size(); i++) {
-			comboBox_2CbxFrituras.addItem(frituras.get(i).getNombre());
+			cbxFrituras.addItem(frituras.get(i).getNombre());
 		}
-		comboBox_2CbxFrituras.addActionListener(new ActionListener() {
+		cbxFrituras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(comboBox_2CbxFrituras.getSelectedItem() == null) {
+				frituras = daoProductos.getByTipo("frituras");
+				if(cbxFrituras.getSelectedItem() == null) {
 					return;
 				}
 				
 				for (int i = 0; i < frituras.size(); i++) {
-					if (comboBox_2CbxFrituras.getSelectedItem().toString()
+					if (cbxFrituras.getSelectedItem().toString()
 							.equalsIgnoreCase(frituras.get(i).getNombre())) {
 						mostrarProductos(frituras.get(i), 2);
 						productoSeleccionado = frituras.get(i);
@@ -118,39 +126,56 @@ public class PanelAdministrador extends JPanel {
 			}
 		});
 
-		comboBox_2CbxFrituras.setBounds(29, 387, 134, 23);
-		add(comboBox_2CbxFrituras);
+		cbxFrituras.setBounds(29, 387, 134, 23);
+		add(cbxFrituras);
 
-		ArrayList<Producto> dulces = daoProductos.getByTipo("dulces");
-		comboBox_3CbxDulces = new JComboBox();
-		comboBox_3CbxDulces.addItem("");
+		dulces = daoProductos.getByTipo("dulces");
+		cbxDulces = new JComboBox();
+		cbxDulces.addItem("");
 		for (int i = 0; i < dulces.size(); i++) {
-			comboBox_3CbxDulces.addItem(dulces.get(i).getNombre());
+			cbxDulces.addItem(dulces.get(i).getNombre());
 		}
-		comboBox_3CbxDulces.addActionListener(new ActionListener() {
+		cbxDulces.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(comboBox_3CbxDulces.getSelectedItem() == null) {
+				dulces = daoProductos.getByTipo("dulces");
+				if(cbxDulces.getSelectedItem() == null) {
 					return;
 				}
 				
 				for (int i = 0; i < dulces.size(); i++) {
-					if (comboBox_3CbxDulces.getSelectedItem().toString().equalsIgnoreCase(dulces.get(i).getNombre())) {
+					if (cbxDulces.getSelectedItem().toString().equalsIgnoreCase(dulces.get(i).getNombre())) {
 						mostrarProductos(dulces.get(i), 3);
 						productoSeleccionado = dulces.get(i);
 					}
 				}
 			}
 		});
-		comboBox_3CbxDulces.setBounds(29, 476, 135, 23);
-		add(comboBox_3CbxDulces);
+		cbxDulces.setBounds(29, 476, 135, 23);
+		add(cbxDulces);
 
 		JButton btnGuardar = new JButton("GUARDAR");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				productoSeleccionado.setNombre(textFieldCbxNombre.getText());
-				productoSeleccionado.setPrecio(Double.parseDouble(textField_1CbxPrecio.getText()));
-				productoSeleccionado.setTipo(comboBoxCbxTipo.getSelectedItem().toString());
-				daoProductos.Update(productoSeleccionado);
+				
+				try {
+					productoSeleccionado.setNombre(txtNombre.getText());
+					productoSeleccionado.setPrecio(Double.parseDouble(txtPrecio.getText()));
+					productoSeleccionado.setTipo(cbxTipo.getSelectedItem().toString());
+					
+					if(!nuevoProducto) {
+						daoProductos.Update(productoSeleccionado);
+					} else {
+						if(!productoSeleccionado.getNombre().isBlank() || productoSeleccionado.getPrecio() !=0 || !productoSeleccionado.getTipo().isBlank()) {
+							daoProductos.insert(productoSeleccionado);
+							JOptionPane.showMessageDialog( null, "Operación realizada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE );
+						}
+					}
+					nuevoProducto = false;
+				}catch(Exception ex) {
+					JOptionPane.showMessageDialog(null, "Datos incompletos para la insercion", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				vaciarCamposText();
 				reiniciarCombos();
 			}
 		});
@@ -158,10 +183,35 @@ public class PanelAdministrador extends JPanel {
 		add(btnGuardar);
 
 		JButton btnEliminar = new JButton("ELIMINAR");
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int respuesta = JOptionPane.showConfirmDialog(null,"¿Desea eliminar este producto?", "Confirmación", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE );
+			       
+			        if (respuesta == JOptionPane.OK_OPTION) {
+			            System.out.println("El usuario aceptó.");
+			            daoProductos.delete(productoSeleccionado);
+			            vaciarCamposText();
+						reiniciarCombos();
+			        } else if (respuesta == JOptionPane.CANCEL_OPTION) {
+			        	vaciarCamposText();
+						reiniciarCombos();
+			        } else if (respuesta == JOptionPane.CLOSED_OPTION) {
+			        	vaciarCamposText();
+						reiniciarCombos();
+			        }
+			           
+			}
+		});
 		btnEliminar.setBounds(320, 737, 84, 20);
 		add(btnEliminar);
 
 		JButton btnNuevo = new JButton("NUEVO");
+		btnNuevo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nuevoProducto = true;
+				vaciarCamposText();
+			}
+		});
 		btnNuevo.setBounds(173, 737, 84, 20);
 		add(btnNuevo);
 
@@ -177,23 +227,23 @@ public class PanelAdministrador extends JPanel {
 		lblNombre.setBounds(256, 255, 68, 12);
 		add(lblNombre);
 
-		textFieldCbxNombre = new JTextField();
-		textFieldCbxNombre.setBounds(334, 252, 134, 18);
-		add(textFieldCbxNombre);
-		textFieldCbxNombre.setColumns(10);
+		txtNombre = new JTextField();
+		txtNombre.setBounds(334, 252, 134, 18);
+		add(txtNombre);
+		txtNombre.setColumns(10);
 
-		textField_1CbxPrecio = new JTextField();
-		textField_1CbxPrecio.setBounds(334, 310, 96, 18);
-		add(textField_1CbxPrecio);
-		textField_1CbxPrecio.setColumns(10);
+		txtPrecio = new JTextField();
+		txtPrecio.setBounds(334, 310, 96, 18);
+		add(txtPrecio);
+		txtPrecio.setColumns(10);
 
-		comboBoxCbxTipo = new JComboBox();
-		comboBoxCbxTipo.setBounds(337, 370, 131, 23);
-		comboBoxCbxTipo.addItem("Bebidas");
-		comboBoxCbxTipo.addItem("Bolleria");
-		comboBoxCbxTipo.addItem("Frituras");
-		comboBoxCbxTipo.addItem("Dulces");
-		add(comboBoxCbxTipo);
+		cbxTipo = new JComboBox();
+		cbxTipo.setBounds(337, 370, 131, 23);
+		cbxTipo.addItem("Bebidas");
+		cbxTipo.addItem("Bolleria");
+		cbxTipo.addItem("Frituras");
+		cbxTipo.addItem("Dulces");
+		add(cbxTipo);
 
 		JLabel lblBebida = new JLabel("BEBIDA");
 		lblBebida.setBounds(65, 161, 53, 14);
@@ -214,45 +264,52 @@ public class PanelAdministrador extends JPanel {
 	}
 
 	public void mostrarProductos(Producto producto, int tipo) {
-		textFieldCbxNombre.setText(producto.getNombre());
-		textField_1CbxPrecio.setText("" + producto.getPrecio());
-		comboBoxCbxTipo.setSelectedIndex(tipo);
+		txtNombre.setText(producto.getNombre());
+		txtPrecio.setText("" + producto.getPrecio());
+		cbxTipo.setSelectedIndex(tipo);
 
 	}
 	
 	public void reiniciarCombos() {
 		ArrayList<Producto> bebidas = daoProductos.getByTipo("bebidas");
-		comboBoxCbxBebidas.removeAllItems();
-		comboBoxCbxBebidas.addItem("");
+		cbxBebidas.removeAllItems();
+		cbxBebidas.addItem("");
 		for (int i = 0; i < bebidas.size(); i++) {
-			comboBoxCbxBebidas.addItem(bebidas.get(i).getNombre());
+			cbxBebidas.addItem(bebidas.get(i).getNombre());
 		}
-		comboBoxCbxBebidas.revalidate();
+		cbxBebidas.revalidate();
 		
 		ArrayList<Producto> bolleria = daoProductos.getByTipo("bolleria");
-		comboBox_1CbxBolleria.removeAllItems();
-		comboBox_1CbxBolleria.addItem("");
+		cbxBolleria.removeAllItems();
+		cbxBolleria.addItem("");
 		for (int i = 0; i < bolleria.size(); i++) {
-			comboBox_1CbxBolleria.addItem(bolleria.get(i).getNombre());
+			cbxBolleria.addItem(bolleria.get(i).getNombre());
 		}
-		comboBox_1CbxBolleria.revalidate();
+		cbxBolleria.revalidate();
 		
 		ArrayList<Producto> frituras = daoProductos.getByTipo("frituras");
-		comboBox_2CbxFrituras.removeAllItems();
-		comboBox_2CbxFrituras.addItem("");
+		cbxFrituras.removeAllItems();
+		cbxFrituras.addItem("");
 		for (int i = 0; i < frituras.size(); i++) {
-			comboBox_2CbxFrituras.addItem(frituras.get(i).getNombre());
+			cbxFrituras.addItem(frituras.get(i).getNombre());
 		}
-		comboBox_2CbxFrituras.revalidate();
+		cbxFrituras.revalidate();
 		
 		
 		ArrayList<Producto> dulces = daoProductos.getByTipo("dulces");
-		comboBox_3CbxDulces.removeAllItems();
-		comboBox_3CbxDulces.addItem("");
+		cbxDulces.removeAllItems();
+		cbxDulces.addItem("");
 		for (int i = 0; i < dulces.size(); i++) {
-			comboBox_3CbxDulces.addItem(dulces.get(i).getNombre());
+			cbxDulces.addItem(dulces.get(i).getNombre());
 		}
-		comboBox_3CbxDulces.revalidate();
+		cbxDulces.revalidate();
+	}
+	
+	public void vaciarCamposText() {
+		txtNombre.setText("");
+		txtPrecio.setText("");
+		cbxTipo.setSelectedIndex(-1);
+		
 	}
 	
 	
