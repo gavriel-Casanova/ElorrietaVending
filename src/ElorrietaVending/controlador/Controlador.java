@@ -4,6 +4,7 @@ package ElorrietaVending.controlador;
 import ElorrietaVending.modelo.DAO.DAOAdministrador;
 import ElorrietaVending.modelo.DAO.DAOCliente;
 import ElorrietaVending.modelo.entidades.Persona;
+import ElorrietaVending.modelo.entidades.Producto;
 import ElorrietaVending.modelo.entidades.Personas.Administrador;
 import ElorrietaVending.modelo.entidades.Personas.Cliente;
 
@@ -24,4 +25,6 @@ public class Controlador {
 		}
 		return ret;
 	}
+	
+	
 }
