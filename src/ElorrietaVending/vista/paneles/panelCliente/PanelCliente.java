@@ -1,49 +1,48 @@
-package ElorrietaVending.vista.paneles.panelAdministrador;
+package ElorrietaVending.vista.paneles.panelCliente;
 
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import ElorrietaVending.modelo.DAO.DAOProductos;
 import ElorrietaVending.modelo.entidades.Producto;
-import ElorrietaVending.modelo.entidades.Productos.Bebida;
 import ElorrietaVending.vista.ventanas.VentanaPrincipal;
 
-import java.awt.Color;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
-
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-public class PanelAdministrador extends JPanel {
+public class PanelCliente extends JPanel{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField txtNombre;
-	private JTextField txtPrecio;
-	private DAOProductos daoProductos = new DAOProductos();
-	private JComboBox<String> cbxTipo = null;
+	
 	private JComboBox<String> cbxBebidas = null;
 	private JComboBox<String> cbxBolleria = null;
 	private JComboBox<String> cbxFrituras = null;
 	private JComboBox<String> cbxDulces = null;
-	private Producto productoSeleccionado = null;
-	private boolean nuevoProducto = false;
 	private ArrayList<Producto> bebidas = null;
 	private ArrayList<Producto> bolleria = null;
 	private ArrayList<Producto> frituras = null;
 	private ArrayList<Producto> dulces = null;
+	private DAOProductos daoProductos = null;
+	private JTextField txtNombre;
+	private JTextField txtPrecio;
+	private JComboBox<String> cbxTipo = null;
+	private Producto productoSeleccionado = null;
 	
-	public PanelAdministrador(VentanaPrincipal ventana) {
-		setBackground(Color.PINK);
+	
+	public PanelCliente(VentanaPrincipal ventana) {
+		setBackground(Color.GREEN);
 		setSize(598, 798);
 		setLayout(null);
-
+		daoProductos = new DAOProductos();
+		
 		JButton btnAtras = new JButton("Atras");
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -52,7 +51,11 @@ public class PanelAdministrador extends JPanel {
 		});
 		btnAtras.setBounds(29, 59, 89, 23);
 		add(btnAtras);
-
+		
+		/**
+		 * El carrito se puede hacer con una ventana nueva o con una tabla o en un panel diferente 
+		 */
+		
 		bebidas = daoProductos.getByTipo("bebidas");
 		cbxBebidas = new JComboBox();
 		cbxBebidas.addActionListener(new ActionListener() {
@@ -152,81 +155,7 @@ public class PanelAdministrador extends JPanel {
 		});
 		cbxDulces.setBounds(29, 476, 135, 23);
 		add(cbxDulces);
-
-		JButton btnGuardar = new JButton("GUARDAR");
-		btnGuardar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				try {
-					productoSeleccionado.setNombre(txtNombre.getText());
-					productoSeleccionado.setPrecio(Double.parseDouble(txtPrecio.getText()));
-					productoSeleccionado.setTipo(cbxTipo.getSelectedItem().toString());
-					
-					if(!nuevoProducto) {
-						daoProductos.Update(productoSeleccionado);
-					} else {
-						if(!productoSeleccionado.getNombre().isBlank() || productoSeleccionado.getPrecio() !=0 || !productoSeleccionado.getTipo().isBlank()) {
-							daoProductos.insert(productoSeleccionado);
-							JOptionPane.showMessageDialog( null, "Operación realizada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE );
-						}
-					}
-					nuevoProducto = false;
-				}catch(Exception ex) {
-					JOptionPane.showMessageDialog(null, "Datos incompletos para la insercion", "Error", JOptionPane.ERROR_MESSAGE);
-				}
-				
-				vaciarCamposText();
-				reiniciarCombos();
-			}
-		});
-		btnGuardar.setBounds(429, 737, 117, 20);
-		add(btnGuardar);
-
-		JButton btnEliminar = new JButton("ELIMINAR");
-		btnEliminar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int respuesta = JOptionPane.showConfirmDialog(null,"¿Desea eliminar este producto?", "Confirmación", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE );
-			       
-			        if (respuesta == JOptionPane.OK_OPTION) {
-			            System.out.println("El usuario aceptó.");
-			            daoProductos.delete(productoSeleccionado);
-			            vaciarCamposText();
-						reiniciarCombos();
-			        } else if (respuesta == JOptionPane.CANCEL_OPTION) {
-			        	vaciarCamposText();
-						reiniciarCombos();
-			        } else if (respuesta == JOptionPane.CLOSED_OPTION) {
-			        	vaciarCamposText();
-						reiniciarCombos();
-			        }
-			           
-			}
-		});
-		btnEliminar.setBounds(295, 737, 109, 20);
-		add(btnEliminar);
-
-		JButton btnNuevo = new JButton("NUEVO");
-		btnNuevo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				nuevoProducto = true;
-				vaciarCamposText();
-			}
-		});
-		btnNuevo.setBounds(148, 737, 109, 20);
-		add(btnNuevo);
-
-		JLabel lblTipo = new JLabel("TIPO:");
-		lblTipo.setBounds(269, 374, 44, 12);
-		add(lblTipo);
-
-		JLabel lblPrecio = new JLabel("PRECIO:");
-		lblPrecio.setBounds(256, 313, 57, 12);
-		add(lblPrecio);
-
-		JLabel lblNombre = new JLabel("NOMBRE:");
-		lblNombre.setBounds(256, 255, 68, 12);
-		add(lblNombre);
-
+		
 		txtNombre = new JTextField();
 		txtNombre.setBounds(334, 252, 134, 18);
 		add(txtNombre);
@@ -236,7 +165,7 @@ public class PanelAdministrador extends JPanel {
 		txtPrecio.setBounds(334, 310, 96, 18);
 		add(txtPrecio);
 		txtPrecio.setColumns(10);
-
+		
 		cbxTipo = new JComboBox();
 		cbxTipo.setBounds(337, 370, 131, 23);
 		cbxTipo.addItem("Bebidas");
@@ -244,7 +173,7 @@ public class PanelAdministrador extends JPanel {
 		cbxTipo.addItem("Frituras");
 		cbxTipo.addItem("Dulces");
 		add(cbxTipo);
-
+		
 		JLabel lblBebida = new JLabel("BEBIDA");
 		lblBebida.setBounds(65, 161, 53, 14);
 		add(lblBebida);
@@ -260,9 +189,20 @@ public class PanelAdministrador extends JPanel {
 		JLabel lblDulces = new JLabel("DULCES");
 		lblDulces.setBounds(72, 451, 46, 14);
 		add(lblDulces);
+		
+		JLabel lblTipo = new JLabel("TIPO:");
+		lblTipo.setBounds(269, 374, 44, 12);
+		add(lblTipo);
 
+		JLabel lblPrecio = new JLabel("PRECIO:");
+		lblPrecio.setBounds(256, 313, 57, 12);
+		add(lblPrecio);
+
+		JLabel lblNombre = new JLabel("NOMBRE:");
+		lblNombre.setBounds(256, 255, 68, 12);
+		add(lblNombre);
 	}
-
+	
 	public void mostrarProductos(Producto producto, int tipo) {
 		txtNombre.setText(producto.getNombre());
 		txtPrecio.setText("" + producto.getPrecio());
@@ -270,47 +210,6 @@ public class PanelAdministrador extends JPanel {
 
 	}
 	
-	public void reiniciarCombos() {
-		ArrayList<Producto> bebidas = daoProductos.getByTipo("bebidas");
-		cbxBebidas.removeAllItems();
-		cbxBebidas.addItem("");
-		for (int i = 0; i < bebidas.size(); i++) {
-			cbxBebidas.addItem(bebidas.get(i).getNombre());
-		}
-		cbxBebidas.revalidate();
-		
-		ArrayList<Producto> bolleria = daoProductos.getByTipo("bolleria");
-		cbxBolleria.removeAllItems();
-		cbxBolleria.addItem("");
-		for (int i = 0; i < bolleria.size(); i++) {
-			cbxBolleria.addItem(bolleria.get(i).getNombre());
-		}
-		cbxBolleria.revalidate();
-		
-		ArrayList<Producto> frituras = daoProductos.getByTipo("frituras");
-		cbxFrituras.removeAllItems();
-		cbxFrituras.addItem("");
-		for (int i = 0; i < frituras.size(); i++) {
-			cbxFrituras.addItem(frituras.get(i).getNombre());
-		}
-		cbxFrituras.revalidate();
-		
-		
-		ArrayList<Producto> dulces = daoProductos.getByTipo("dulces");
-		cbxDulces.removeAllItems();
-		cbxDulces.addItem("");
-		for (int i = 0; i < dulces.size(); i++) {
-			cbxDulces.addItem(dulces.get(i).getNombre());
-		}
-		cbxDulces.revalidate();
-	}
-	
-	public void vaciarCamposText() {
-		txtNombre.setText("");
-		txtPrecio.setText("");
-		cbxTipo.setSelectedIndex(-1);
-		
-	}
-	
+
 	
 }

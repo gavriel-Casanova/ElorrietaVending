@@ -13,13 +13,18 @@ import java.awt.event.ActionEvent;
 import ElorrietaVending.controlador.Controlador;
 import ElorrietaVending.modelo.entidades.Persona;
 import ElorrietaVending.modelo.entidades.Personas.Administrador;
+import ElorrietaVending.modelo.entidades.Personas.Cliente;
 import ElorrietaVending.vista.ventanas.VentanaPrincipal;
 
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 public class PanelLogin extends JPanel {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JTextField textUsuario;
+	private JTextField textContraseña;
+	
 	public PanelLogin(VentanaPrincipal ventana ) {
 		setSize(598, 798);
 		setLayout(null);
@@ -29,7 +34,7 @@ public class PanelLogin extends JPanel {
 		add(lblUsuario);
 
 		JLabel lblNewLabel = new JLabel("CONTRASEÑA:");
-		lblNewLabel.setBounds(77, 240, 72, 25);
+		lblNewLabel.setBounds(58, 240, 105, 25);
 		add(lblNewLabel);
 
 		textUsuario = new JTextField();
@@ -44,12 +49,8 @@ public class PanelLogin extends JPanel {
 		add(textContraseña);
 		textContraseña.setColumns(10);
 
-		JButton btnIngreso = new JButton("Click");
-		btnIngreso.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnIngreso.setBounds(164, 348, 84, 20);
+		JButton btnIngreso = new JButton("Login");
+		btnIngreso.setBounds(105, 305, 141, 38);
 		btnIngreso.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Controlador controlador = new Controlador();
@@ -63,19 +64,23 @@ public class PanelLogin extends JPanel {
 							JOptionPane.ERROR_MESSAGE);
 				}else if(persona instanceof Administrador ) {
 					ventana.cambiarPanel(1);
+				}else if(persona instanceof Cliente ) {
+					ventana.cambiarPanel(2);
 				}
 
 				System.out.println(persona);
+				vaciarCamposText();
 			}
 		});
 
 		add(btnIngreso);
 	}
+	
+	public void vaciarCamposText() {
+		textUsuario.setText("");
+		textContraseña.setText("");
+	}
+	
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private JTextField textUsuario;
-	private JTextField textContraseña;
+	
 }

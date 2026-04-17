@@ -7,8 +7,13 @@ import javax.swing.JPanel;
 
 import ElorrietaVending.vista.paneles.PanelLogin;
 import ElorrietaVending.vista.paneles.panelAdministrador.PanelAdministrador;
+import ElorrietaVending.vista.paneles.panelCliente.PanelCliente;
 
 public class VentanaPrincipal extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ArrayList<JPanel> paneles = new ArrayList<JPanel>();
  
 	public VentanaPrincipal() {
@@ -20,6 +25,8 @@ public class VentanaPrincipal extends JFrame {
 		paneles.add(panelLogin);
 		PanelAdministrador panelAdministrador = new PanelAdministrador(this);
 		paneles.add(panelAdministrador);
+		PanelCliente panelCliente = new PanelCliente(this);
+		paneles.add(panelCliente);
 	}
 
 	public void hacerVisible() {
@@ -29,9 +36,6 @@ public class VentanaPrincipal extends JFrame {
 		setContentPane(paneles.get(posicion));
 	}
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 
 }
