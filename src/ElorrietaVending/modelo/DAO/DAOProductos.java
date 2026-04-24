@@ -83,6 +83,66 @@ public class DAOProductos implements DaoInterfaces<Producto> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public Producto getByNombre(String nombre) {
+		Producto producto = null;
+		
+		String sql = "select * from producto where nombre = '" + nombre + "'";
+
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+
+		try {
+			// El Driver que vamos a usar
+			Class.forName(DBUtils.DRIVER);
+
+			connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
+
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(sql);
+
+			while (resultSet.next()) {
+
+
+				 producto = new Producto();
+
+				int id = resultSet.getInt("id");
+				String nomb = resultSet.getString("nombre");
+				double precio = resultSet.getDouble("precio");
+				String tipo2 = resultSet.getString("tipo");
+
+				producto.setId(id);
+				producto.setNombre(nomb);
+				producto.setPrecio(precio);
+				producto.setTipo(tipo2);
+
+			}
+		} catch (SQLException sqle) {
+			System.out.println("Error con la BBDD - " + sqle.getMessage());
+		} catch (Exception e) {
+			System.out.println("Error generico - " + e.getMessage());
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+			} catch (Exception e) {
+			}
+			try {
+				if (statement != null)
+					statement.close();
+			} catch (Exception e) {
+				// No hace falta
+			}
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (Exception e) {
+				// No hace falta
+			}
+		}
+		return producto;
+	}
 
 	public ArrayList<Producto> getByTipo(String tipo) {
 		ArrayList<Producto> ret = null;

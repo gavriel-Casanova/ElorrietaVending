@@ -8,12 +8,19 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import com.mysql.cj.xdevapi.Table;
 
 import ElorrietaVending.modelo.DAO.DAOProductos;
 import ElorrietaVending.modelo.entidades.Producto;
 import ElorrietaVending.vista.ventanas.VentanaPrincipal;
+import javax.swing.JTable;
+import javax.swing.UIManager;
 
 public class PanelCliente extends JPanel{
 
@@ -35,10 +42,13 @@ public class PanelCliente extends JPanel{
 	private JTextField txtPrecio;
 	private JComboBox<String> cbxTipo = null;
 	private Producto productoSeleccionado = null;
-	
+	private JTable tbCarrito = null;
+	private DefaultTableModel modelo = null;
+	private JButton btnAgregarCarrito = null;
+	private JButton btnEliminarCarrito = null;
 	
 	public PanelCliente(VentanaPrincipal ventana) {
-		setBackground(Color.GREEN);
+		setBackground(new Color(143, 188, 143));
 		setSize(598, 798);
 		setLayout(null);
 		daoProductos = new DAOProductos();
@@ -157,17 +167,19 @@ public class PanelCliente extends JPanel{
 		add(cbxDulces);
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(334, 252, 134, 18);
+		txtNombre.setEditable(false);
+		txtNombre.setBounds(311, 173, 134, 18);
 		add(txtNombre);
 		txtNombre.setColumns(10);
 
 		txtPrecio = new JTextField();
-		txtPrecio.setBounds(334, 310, 96, 18);
+		txtPrecio.setEditable(false);
+		txtPrecio.setBounds(311, 240, 96, 18);
 		add(txtPrecio);
 		txtPrecio.setColumns(10);
 		
 		cbxTipo = new JComboBox();
-		cbxTipo.setBounds(337, 370, 131, 23);
+		cbxTipo.setBounds(311, 308, 131, 23);
 		cbxTipo.addItem("Bebidas");
 		cbxTipo.addItem("Bolleria");
 		cbxTipo.addItem("Frituras");
@@ -191,25 +203,58 @@ public class PanelCliente extends JPanel{
 		add(lblDulces);
 		
 		JLabel lblTipo = new JLabel("TIPO:");
-		lblTipo.setBounds(269, 374, 44, 12);
+		lblTipo.setBounds(233, 313, 44, 12);
 		add(lblTipo);
 
 		JLabel lblPrecio = new JLabel("PRECIO:");
-		lblPrecio.setBounds(256, 313, 57, 12);
+		lblPrecio.setBounds(233, 243, 57, 12);
 		add(lblPrecio);
 
 		JLabel lblNombre = new JLabel("NOMBRE:");
-		lblNombre.setBounds(256, 255, 68, 12);
+		lblNombre.setBounds(233, 176, 68, 12);
 		add(lblNombre);
+		
+		String[] columnas = {"Nombre", "Precio", "Tipo"};
+        modelo = new DefaultTableModel(columnas, 0);
+		
+		tbCarrito = new JTable(modelo);
+		JScrollPane scpCarrito = new JScrollPane(tbCarrito);
+		scpCarrito.setLocation(233, 426);
+		scpCarrito.setSize(318, 306);
+		tbCarrito.setBounds(265, 480, 256, 239);
+		add(scpCarrito);
+		
+		btnAgregarCarrito = new JButton("Agregar");
+		btnAgregarCarrito.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String [] añadir = {productoSeleccionado.getNombre(),""+ productoSeleccionado.getPrecio(), productoSeleccionado.getTipo()};
+				modelo.addRow(añadir);
+			}
+		});
+		btnAgregarCarrito.setBounds(29, 530, 135, 31);
+		add(btnAgregarCarrito);
+		
+		btnEliminarCarrito = new JButton("Eliminar");
+		btnEliminarCarrito.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int filaSeleccionada = tbCarrito.getSelectedRow();
+				
+				if (filaSeleccionada != -1) {
+                    modelo.removeRow(filaSeleccionada);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor, selecciona una fila primero.");
+                }
+			}
+		});
+		btnEliminarCarrito.setBounds(29, 576, 135, 31);
+		add(btnEliminarCarrito);
+		
 	}
 	
 	public void mostrarProductos(Producto producto, int tipo) {
 		txtNombre.setText(producto.getNombre());
 		txtPrecio.setText("" + producto.getPrecio());
 		cbxTipo.setSelectedIndex(tipo);
-
 	}
-	
-
 	
 }
