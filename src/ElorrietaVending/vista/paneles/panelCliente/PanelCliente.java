@@ -3,6 +3,8 @@ package ElorrietaVending.vista.paneles.panelCliente;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -22,13 +24,13 @@ import ElorrietaVending.vista.ventanas.VentanaPrincipal;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 
-public class PanelCliente extends JPanel{
+public class PanelCliente extends JPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private JComboBox<String> cbxBebidas = null;
 	private JComboBox<String> cbxBolleria = null;
 	private JComboBox<String> cbxFrituras = null;
@@ -46,13 +48,15 @@ public class PanelCliente extends JPanel{
 	private DefaultTableModel modelo = null;
 	private JButton btnAgregarCarrito = null;
 	private JButton btnEliminarCarrito = null;
-	
+	private double precioFinal =0;
+	private JLabel lblDatoPrecio = null;
+
 	public PanelCliente(VentanaPrincipal ventana) {
 		setBackground(new Color(143, 188, 143));
 		setSize(598, 798);
 		setLayout(null);
 		daoProductos = new DAOProductos();
-		
+
 		JButton btnAtras = new JButton("Atras");
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -61,16 +65,17 @@ public class PanelCliente extends JPanel{
 		});
 		btnAtras.setBounds(29, 59, 89, 23);
 		add(btnAtras);
-		
+
 		/**
-		 * El carrito se puede hacer con una ventana nueva o con una tabla o en un panel diferente 
+		 * El carrito se puede hacer con una ventana nueva o con una tabla o en un panel
+		 * diferente
 		 */
-		
+
 		bebidas = daoProductos.getByTipo("bebidas");
 		cbxBebidas = new JComboBox();
 		cbxBebidas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(cbxBebidas.getSelectedItem() == null) {
+				if (cbxBebidas.getSelectedItem() == null) {
 					return;
 				}
 				bebidas = daoProductos.getByTipo("bebidas");
@@ -99,13 +104,12 @@ public class PanelCliente extends JPanel{
 		cbxBolleria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				bolleria = daoProductos.getByTipo("bolleria");
-				if(cbxBolleria.getSelectedItem() == null) {
+				if (cbxBolleria.getSelectedItem() == null) {
 					return;
 				}
-				
+
 				for (int i = 0; i < bolleria.size(); i++) {
-					if (cbxBolleria.getSelectedItem().toString()
-							.equalsIgnoreCase(bolleria.get(i).getNombre())) {
+					if (cbxBolleria.getSelectedItem().toString().equalsIgnoreCase(bolleria.get(i).getNombre())) {
 						mostrarProductos(bolleria.get(i), 1);
 						productoSeleccionado = bolleria.get(i);
 					}
@@ -125,13 +129,12 @@ public class PanelCliente extends JPanel{
 		cbxFrituras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frituras = daoProductos.getByTipo("frituras");
-				if(cbxFrituras.getSelectedItem() == null) {
+				if (cbxFrituras.getSelectedItem() == null) {
 					return;
 				}
-				
+
 				for (int i = 0; i < frituras.size(); i++) {
-					if (cbxFrituras.getSelectedItem().toString()
-							.equalsIgnoreCase(frituras.get(i).getNombre())) {
+					if (cbxFrituras.getSelectedItem().toString().equalsIgnoreCase(frituras.get(i).getNombre())) {
 						mostrarProductos(frituras.get(i), 2);
 						productoSeleccionado = frituras.get(i);
 					}
@@ -151,10 +154,10 @@ public class PanelCliente extends JPanel{
 		cbxDulces.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dulces = daoProductos.getByTipo("dulces");
-				if(cbxDulces.getSelectedItem() == null) {
+				if (cbxDulces.getSelectedItem() == null) {
 					return;
 				}
-				
+
 				for (int i = 0; i < dulces.size(); i++) {
 					if (cbxDulces.getSelectedItem().toString().equalsIgnoreCase(dulces.get(i).getNombre())) {
 						mostrarProductos(dulces.get(i), 3);
@@ -165,7 +168,7 @@ public class PanelCliente extends JPanel{
 		});
 		cbxDulces.setBounds(29, 476, 135, 23);
 		add(cbxDulces);
-		
+
 		txtNombre = new JTextField();
 		txtNombre.setEditable(false);
 		txtNombre.setBounds(311, 173, 134, 18);
@@ -177,15 +180,16 @@ public class PanelCliente extends JPanel{
 		txtPrecio.setBounds(311, 240, 96, 18);
 		add(txtPrecio);
 		txtPrecio.setColumns(10);
-		
+
 		cbxTipo = new JComboBox();
+		cbxTipo.setEnabled(false);
 		cbxTipo.setBounds(311, 308, 131, 23);
 		cbxTipo.addItem("Bebidas");
 		cbxTipo.addItem("Bolleria");
 		cbxTipo.addItem("Frituras");
 		cbxTipo.addItem("Dulces");
 		add(cbxTipo);
-		
+
 		JLabel lblBebida = new JLabel("BEBIDA");
 		lblBebida.setBounds(65, 161, 53, 14);
 		add(lblBebida);
@@ -201,7 +205,7 @@ public class PanelCliente extends JPanel{
 		JLabel lblDulces = new JLabel("DULCES");
 		lblDulces.setBounds(72, 451, 46, 14);
 		add(lblDulces);
-		
+
 		JLabel lblTipo = new JLabel("TIPO:");
 		lblTipo.setBounds(233, 313, 44, 12);
 		add(lblTipo);
@@ -213,10 +217,10 @@ public class PanelCliente extends JPanel{
 		JLabel lblNombre = new JLabel("NOMBRE:");
 		lblNombre.setBounds(233, 176, 68, 12);
 		add(lblNombre);
-		
-		String[] columnas = {"Nombre", "Precio", "Tipo"};
-        modelo = new DefaultTableModel(columnas, 0);
-		
+
+		String[] columnas = { "Nombre", "Precio", "Tipo" };
+		modelo = new DefaultTableModel(columnas, 0);
+
 		tbCarrito = new JTable(modelo);
 		JScrollPane scpCarrito = new JScrollPane(tbCarrito);
 		scpCarrito.setLocation(233, 426);
@@ -224,37 +228,69 @@ public class PanelCliente extends JPanel{
 		tbCarrito.setBounds(265, 480, 256, 239);
 		add(scpCarrito);
 		
+		JLabel lblPrecioFinal = new JLabel("Precio Final:");
+		lblPrecioFinal.setBounds(200, 59, 114, 31);
+		add(lblPrecioFinal);
+		
+		lblDatoPrecio = new JLabel("0€");
+		lblDatoPrecio.setBounds(311, 63, 114, 27);
+		add(lblDatoPrecio);
+
 		btnAgregarCarrito = new JButton("Agregar");
 		btnAgregarCarrito.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String [] añadir = {productoSeleccionado.getNombre(),""+ productoSeleccionado.getPrecio(), productoSeleccionado.getTipo()};
-				modelo.addRow(añadir);
+				if (productoSeleccionado != null) {
+					String[] añadir = { productoSeleccionado.getNombre(), "" + productoSeleccionado.getPrecio(),
+							productoSeleccionado.getTipo() };
+					modelo.addRow(añadir);
+					precioFinal = redondear(precioFinal + productoSeleccionado.getPrecio());
+					lblDatoPrecio.setText(""+ precioFinal+"€");	
+					checkPrecio();
+				} else {
+					JOptionPane.showMessageDialog(null, "Por favor, selecciona un producto primero.");
+				}
 			}
 		});
 		btnAgregarCarrito.setBounds(29, 530, 135, 31);
 		add(btnAgregarCarrito);
-		
+
 		btnEliminarCarrito = new JButton("Eliminar");
 		btnEliminarCarrito.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int filaSeleccionada = tbCarrito.getSelectedRow();
-				
+
 				if (filaSeleccionada != -1) {
-                    modelo.removeRow(filaSeleccionada);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Por favor, selecciona una fila primero.");
-                }
+					double precio = Double.parseDouble((String) tbCarrito.getValueAt(filaSeleccionada, 1));
+					precioFinal =  redondear(precioFinal - precio);
+					lblDatoPrecio.setText(""+ precioFinal+"€");
+					checkPrecio();
+					modelo.removeRow(filaSeleccionada);
+				} else {
+					JOptionPane.showMessageDialog(null, "Por favor, selecciona una fila primero.");
+				}
 			}
 		});
 		btnEliminarCarrito.setBounds(29, 576, 135, 31);
 		add(btnEliminarCarrito);
 		
+		
+
 	}
-	
+
 	public void mostrarProductos(Producto producto, int tipo) {
 		txtNombre.setText(producto.getNombre());
 		txtPrecio.setText("" + producto.getPrecio());
 		cbxTipo.setSelectedIndex(tipo);
 	}
 	
+	private void checkPrecio() {
+		if(precioFinal <=0) {
+			lblDatoPrecio.setText("0€");
+			precioFinal = 0;
+		}
+	}
+	
+	public double redondear(double valor ) {
+	    return new BigDecimal(valor).setScale(2, RoundingMode.HALF_UP).doubleValue();
+	}
 }
